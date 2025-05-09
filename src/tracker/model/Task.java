@@ -30,6 +30,7 @@ public class Task {
     public LocalDateTime getStartTime() {
         return startTime;
     }
+
     public Duration getDuration() {
         return duration;
     }
@@ -75,7 +76,7 @@ public class Task {
         this.status = other.status;
     }
 
-    public void setTitle(String title) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -98,5 +99,11 @@ public class Task {
 
     public TaskType getType() {
         return type;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+    }
+
+    public void setDuration(Duration duration) {
     }
 }

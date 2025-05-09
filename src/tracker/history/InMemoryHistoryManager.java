@@ -31,6 +31,10 @@ public class InMemoryHistoryManager implements HistoryManager {
 
         Node node = linkLast(task);
         nodeMap.put(id, node);
+
+        if (nodeMap.size() > 10) {
+            removeNode(head);
+        }
     }
 
     @Override
