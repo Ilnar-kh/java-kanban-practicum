@@ -18,18 +18,6 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void shouldStoreOnlyLastTenTasks() {
-        for (int i = 1; i <= 12; i++) {
-            history.add(new Task(i, "Задача " + i, "Описание", Status.NEW));
-        }
-
-        List<Task> h = history.getHistory();
-        assertEquals(10, h.size(), "История должна хранить не более 10 последних задач");
-        assertEquals(3, h.get(0).getId(), "Первая в истории должна быть 3-я добавленная (1 и 2 откинулись)");
-        assertEquals(12, h.get(h.size() - 1).getId());
-    }
-
-    @Test
     void shouldRemoveDuplicatesAndMoveTaskToEnd() {
         Task t1 = new Task(1, "Задача", "Описание", Status.NEW);
         Task t2 = new Task(2, "Другая", "Описание", Status.NEW);

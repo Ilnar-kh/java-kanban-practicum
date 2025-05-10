@@ -5,7 +5,6 @@ import tracker.model.Task;
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-
     private static class Node {
         Task task;
         Node prev;
@@ -31,10 +30,6 @@ public class InMemoryHistoryManager implements HistoryManager {
 
         Node node = linkLast(task);
         nodeMap.put(id, node);
-
-        if (nodeMap.size() > 10) {
-            removeNode(head);
-        }
     }
 
     @Override

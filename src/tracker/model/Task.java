@@ -104,6 +104,11 @@ public class Task {
     public void setStartTime(LocalDateTime startTime) {
     }
 
+
+
     public void setDuration(Duration duration) {
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
     }
 }

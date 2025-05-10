@@ -8,8 +8,6 @@ import java.util.Objects;
 
 public class Epic extends Task {
     private final List<Integer> subtaskIds = new ArrayList<>();
-    private Duration duration;
-    private LocalDateTime startTime;
     private LocalDateTime endTime;
 
     public void updateFieldsFromSubtasks(List<Subtask> subtasks) {

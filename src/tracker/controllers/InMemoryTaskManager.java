@@ -3,6 +3,8 @@ package tracker.controllers;
 import tracker.history.HistoryManager;
 import tracker.model.*;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -43,10 +45,6 @@ public class InMemoryTaskManager implements TaskManager {
         final int id = generateId();
         epic.setId(id);
         epics.put(id, epic);
-        if (epic.getStartTime() != null) {
-            prioritizedTasks.add(epic);
-        }
-
         return id;
     }
 
@@ -60,6 +58,8 @@ public class InMemoryTaskManager implements TaskManager {
         subtasks.put(id, subtask);
         epics.get(subtask.getEpicId()).addSubtask(id);
         updateEpicStatus(subtask.getEpicId());
+        Epic epic = epics.get(subtask.getEpicId());
+        updateEpicTime(epic);
         if (subtask.getStartTime() != null) {
             prioritizedTasks.add(subtask);
         }
@@ -167,9 +167,6 @@ public class InMemoryTaskManager implements TaskManager {
             prioritizedTasks.remove(oldEpic);
             oldEpic.setName(epic.getName());
             oldEpic.setDescription(epic.getDescription());
-            if (epic.getStartTime() != null) {
-                prioritizedTasks.add(epic);
-            }
         }
     }
 
@@ -207,15 +204,52 @@ public class InMemoryTaskManager implements TaskManager {
             if (epic != null) {
                 epic.removeSubtaskId(id);
                 updateEpicStatus(epic.getId());
+                updateEpicTime(epic);
             }
             historyManager.remove(id);
         }
+    }
+
+    public void updateEpicTime(Epic epic) {
+        List<Subtask> subtaskList = epic.getSubtaskIds().stream()
+                .map(subtasks::get)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        if (subtaskList.isEmpty()) {
+            epic.setStartTime(null);
+            epic.setEndTime(null);
+            epic.setDuration(Duration.ZERO);
+            return;
+        }
+
+        LocalDateTime startTime = subtaskList.stream()
+                .map(Task::getStartTime)
+                .filter(Objects::nonNull)
+                .min(LocalDateTime::compareTo)
+                .orElse(null);
+
+        LocalDateTime endTime = subtaskList.stream()
+                .map(Task::getEndTime)
+                .filter(Objects::nonNull)
+                .max(LocalDateTime::compareTo)
+                .orElse(null);
+
+        Duration totalDuration = subtaskList.stream()
+                .map(Task::getDuration)
+                .filter(Objects::nonNull)
+                .reduce(Duration.ZERO, Duration::plus);
+
+        epic.setStartTime(startTime);
+        epic.setEndTime(endTime);
+        epic.setDuration(totalDuration);
     }
 
     @Override
     public void removeTasks() {
         for (Task task : tasks.values()) {
             historyManager.remove(task.getId());
+            prioritizedTasks.remove(task);
         }
         tasks.clear();
     }
@@ -227,6 +261,10 @@ public class InMemoryTaskManager implements TaskManager {
             for (Integer subtaskId : epic.getSubtaskIds()) {
                 historyManager.remove(subtaskId);
                 subtasks.remove(subtaskId);
+                Subtask subtask = subtasks.remove(subtaskId);
+                if (subtask != null) {
+                    prioritizedTasks.remove(subtask);
+                }
             }
         }
         epics.clear();
@@ -243,6 +281,7 @@ public class InMemoryTaskManager implements TaskManager {
             epic.getSubtaskIds().clear();
             epic.clearSubtaskIds();
             updateEpicStatus(epic.getId());
+            updateEpicTime(epic);
         }
         subtasks.clear();
     }
