@@ -5,7 +5,6 @@ import tracker.model.Task;
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-
     private static class Node {
         Task task;
         Node prev;

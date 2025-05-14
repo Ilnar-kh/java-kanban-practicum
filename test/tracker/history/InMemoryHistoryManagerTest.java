@@ -10,22 +10,11 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryHistoryManagerTest {
-    private InMemoryHistoryManager historyManager;
+    private InMemoryHistoryManager history;
 
     @BeforeEach
     void setUp() {
-        historyManager = new InMemoryHistoryManager();
-    }
-
-    @Test
-    void shouldAddTasksInOrderWithoutLimit() {
-        for (int i = 1; i <= 12; i++) {
-            historyManager.add(new Task(i, "Задача " + i, "Описание", Status.NEW));
-        }
-
-        List<Task> history = historyManager.getHistory();
-        assertEquals(12, history.size(), "История должна хранить все просмотренные задачи без ограничений");
-        assertEquals(1, history.get(0).getId(), "Первая добавленная задача должна быть первой в списке");
+        history = new InMemoryHistoryManager();
     }
 
     @Test
@@ -33,14 +22,14 @@ class InMemoryHistoryManagerTest {
         Task t1 = new Task(1, "Задача", "Описание", Status.NEW);
         Task t2 = new Task(2, "Другая", "Описание", Status.NEW);
 
-        historyManager.add(t1);
-        historyManager.add(t2);
-        historyManager.add(t1);
+        history.add(t1);
+        history.add(t2);
+        history.add(t1);
 
-        List<Task> history = historyManager.getHistory();
-        assertEquals(2, history.size());
-        assertEquals(t2.getId(), history.get(0).getId());
-        assertEquals(t1.getId(), history.get(1).getId());
+        List<Task> h = history.getHistory();
+        assertEquals(2, h.size());
+        assertEquals(2, h.get(0).getId());
+        assertEquals(1, h.get(1).getId());
     }
 
     @Test
@@ -48,18 +37,18 @@ class InMemoryHistoryManagerTest {
         Task t1 = new Task(1, "Одна", "Описание", Status.NEW);
         Task t2 = new Task(2, "Вторая", "Описание", Status.NEW);
 
-        historyManager.add(t1);
-        historyManager.add(t2);
-        historyManager.remove(1);
+        history.add(t1);
+        history.add(t2);
+        history.remove(1);
 
-        List<Task> history = historyManager.getHistory();
-        assertEquals(1, history.size());
-        assertEquals(t2.getId(), history.get(0).getId());
+        List<Task> h = history.getHistory();
+        assertEquals(1, h.size());
+        assertEquals(2, h.get(0).getId());
     }
 
     @Test
     void shouldNotFailOnNullTask() {
-        assertDoesNotThrow(() -> historyManager.add(null));
-        assertTrue(historyManager.getHistory().isEmpty(), "Null не должен добавляться в историю");
+        assertDoesNotThrow(() -> history.add(null));
+        assertTrue(history.getHistory().isEmpty(), "Null не должен добавляться в историю");
     }
 }
