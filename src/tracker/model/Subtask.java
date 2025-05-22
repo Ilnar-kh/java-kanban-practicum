@@ -1,18 +1,22 @@
 package tracker.model;
 
-import tracker.model.Status;
-
 import java.util.Objects;
 
 public class Subtask extends Task {
 
     private int epicId;
-    protected TaskType type;
 
-    public Subtask(int id, String name, String description, Status status, int epicId) {
+    public Subtask(int id,
+                   String name,
+                   String description,
+                   Status status,
+                   int epicId) {
         super(id, name, description, status);
-        this.type = TaskType.SUBTASK;
-        this.epicId = (epicId == id) ? -1 : epicId;
+
+        if (id == epicId) {
+            this.id = 0;
+        }
+        this.epicId = epicId;
     }
 
     public Subtask(Subtask other) {

@@ -23,6 +23,15 @@ public class Task {
         this.type = TaskType.TASK;
     }
 
+    public Task(String name, String description, Status status,
+                Duration duration, LocalDateTime startTime) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.duration = duration;
+        this.startTime = startTime;
+    }
+
     public LocalDateTime getEndTime() {
         return (startTime != null && duration != null) ? startTime.plusMinutes(duration.toMinutes()) : null;
     }
@@ -102,11 +111,16 @@ public class Task {
     }
 
     public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
     public void setDuration(Duration duration) {
+        this.duration = duration;
     }
 
     public void setEndTime(LocalDateTime endTime) {
+        if (startTime != null && endTime != null) {
+            this.duration = Duration.between(startTime, endTime);
+        }
     }
 }
