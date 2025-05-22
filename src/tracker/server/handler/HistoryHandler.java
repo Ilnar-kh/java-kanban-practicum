@@ -9,17 +9,11 @@ import java.io.IOException;
 
 import java.util.NoSuchElementException;
 
-import com.google.gson.Gson;
-
 
 public class HistoryHandler extends BaseHttpHandler implements HttpHandler {
 
-    private final TaskManager taskManager;
-    private final Gson gson;
-
-    public HistoryHandler(TaskManager taskManager, Gson gson) {
+    public HistoryHandler(TaskManager taskManager) {
         this.taskManager = taskManager;
-        this.gson = gson;
     }
 
     @Override

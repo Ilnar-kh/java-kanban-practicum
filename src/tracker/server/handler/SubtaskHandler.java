@@ -9,18 +9,13 @@ import java.util.NoSuchElementException;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import com.google.gson.Gson;
 import tracker.model.Subtask;
 
 
 public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
 
-    private final Gson gson;
-    private final TaskManager taskManager;
-
-    public SubtaskHandler(TaskManager taskManager, Gson gson) {
+    public SubtaskHandler(TaskManager taskManager) {
         this.taskManager = taskManager;
-        this.gson = gson;
     }
 
     @Override

@@ -2,7 +2,6 @@ package tracker.server.handler;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import com.google.gson.Gson;
 import tracker.controllers.TaskManager;
 import tracker.model.Task;
 
@@ -12,12 +11,8 @@ import java.util.NoSuchElementException;
 
 public class TaskHandler extends BaseHttpHandler implements HttpHandler {
 
-    private final TaskManager taskManager;
-    private final Gson gson;
-
-    public TaskHandler(TaskManager taskManager, Gson gson) {
+    public TaskHandler(TaskManager taskManager) {
         this.taskManager = taskManager;
-        this.gson = gson;
     }
 
     @Override

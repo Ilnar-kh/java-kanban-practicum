@@ -1,6 +1,5 @@
 package tracker.server.handler;
 
-import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import tracker.controllers.TaskManager;
@@ -13,12 +12,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class EpicHandler extends BaseHttpHandler implements HttpHandler {
 
-    private final Gson gson;
-    private final TaskManager taskManager;
 
-    public EpicHandler(TaskManager taskManager, Gson gson) {
+    public EpicHandler(TaskManager taskManager) {
         this.taskManager = taskManager;
-        this.gson        = gson;
     }
 
     @Override

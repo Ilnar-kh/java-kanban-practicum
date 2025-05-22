@@ -1,11 +1,25 @@
 package tracker.server.handler;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
+import tracker.controllers.TaskManager;
+import tracker.server.adapters.DurationAdapter;
+import tracker.server.adapters.LocalDateTimeAdapter;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class BaseHttpHandler {
+
+    protected TaskManager taskManager;
+    protected  Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Duration .class, new DurationAdapter().nullSafe())
+            .registerTypeAdapter(LocalDateTime .class, new LocalDateTimeAdapter().nullSafe())
+            .create();
+
     protected void sendText(HttpExchange h, String text) throws IOException {
         byte[] resp = text.getBytes(StandardCharsets.UTF_8);
         h.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");

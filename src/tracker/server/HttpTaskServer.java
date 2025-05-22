@@ -17,21 +17,20 @@ import java.time.LocalDateTime;
 
 public class HttpTaskServer {
     private final HttpServer httpServer;
-    private final Gson gson;
 
     public HttpTaskServer(TaskManager manager) throws IOException {
-        this.gson = new GsonBuilder()
-                .registerTypeAdapter(Duration.class, new DurationAdapter().nullSafe())
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter().nullSafe())
-                .create();
+//        this.gson = new GsonBuilder()
+//                .registerTypeAdapter(Duration.class, new DurationAdapter().nullSafe())
+//                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter().nullSafe())
+//                .create();
 
         this.httpServer = HttpServer.create(new InetSocketAddress(8080), 0);
 
-        httpServer.createContext("/tasks", new TaskHandler(manager, gson));
-        httpServer.createContext("/subtasks", new SubtaskHandler(manager, gson));
-        httpServer.createContext("/epics", new EpicHandler(manager, gson));
-        httpServer.createContext("/history", new HistoryHandler(manager, gson));
-        httpServer.createContext("/prioritized", new PrioritizedHandler(manager, gson));
+        httpServer.createContext("/tasks", new TaskHandler(manager));
+        httpServer.createContext("/subtasks", new SubtaskHandler(manager));
+        httpServer.createContext("/epics", new EpicHandler(manager));
+        httpServer.createContext("/history", new HistoryHandler(manager));
+        httpServer.createContext("/prioritized", new PrioritizedHandler(manager));
     }
 
     public static Gson getGson() {

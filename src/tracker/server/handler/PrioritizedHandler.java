@@ -7,17 +7,11 @@ import tracker.controllers.TaskManager;
 import java.io.IOException;
 import java.util.NoSuchElementException;
 
-import com.google.gson.Gson;
-
 
 public class PrioritizedHandler extends BaseHttpHandler implements HttpHandler {
 
-    private final TaskManager taskManager;
-    private final Gson gson;
-
-    public PrioritizedHandler(TaskManager taskManager, Gson gson) {
+    public PrioritizedHandler(TaskManager taskManager) {
         this.taskManager = taskManager;
-        this.gson = gson;
     }
 
     @Override
